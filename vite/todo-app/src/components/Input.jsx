@@ -1,10 +1,18 @@
 import { useState } from "react";
 
-const Input = ({ type = "text", name, children, handler }) => {
-  const [input, setInput] = useState("");
+const Input = ({
+  type = "text",
+  name,
+  children,
+  handler: submitHandler,
+  className = "",
+  readonly = false,
+  canBePlaceholder,
+}) => {
+  const [input, setInput] = useState(!canBePlaceholder ? children : "");
 
   const keyDownHandler = (e) =>
-    e.keyCode === 13 && handler(input) && setInput("");
+    e.keyCode === 13 && submitHandler && submitHandler(input) && setInput("");
 
   const changeHandler = (e) => {
     setInput(e.target.value);
@@ -12,12 +20,14 @@ const Input = ({ type = "text", name, children, handler }) => {
 
   return (
     <input
+      className={className}
       type={type}
       name={name}
-      placeholder={children}
+      placeholder={canBePlaceholder ? children : ""}
       value={input}
       onChange={changeHandler}
       onKeyDown={keyDownHandler}
+      readOnly={readonly}
     />
   );
 };
