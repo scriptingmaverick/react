@@ -1,4 +1,16 @@
-const d = JSON.parse(Deno.readTextFileSync("pokemon_details.json"));
+// const d = JSON.parse(Deno.readTextFileSync("./src/assets/poki-data.json"));
+import data from "./src/assets/poki-data.json" with { type: "json" };
+
+const newdata = Object.values(
+  Object.values(data)
+    .reduce((mainData, type) => mainData.push(...type) && mainData, [])
+    .reduce(
+      (distinctData, pokemon) =>
+        (distinctData[pokemon.id] = pokemon) && distinctData,
+      {},
+    ),
+);
+const mainData = { ...data, all: newdata };
 
 // {
 //   "name": "bulbasaur",
@@ -22,18 +34,21 @@ const d = JSON.parse(Deno.readTextFileSync("pokemon_details.json"));
 // const f = JSON.parse(d);
 // console.log(d);
 
-const newF = d.map(({ name, types, weight, base_xp, powers, img }) => ({
-  name,
-  types,
-  stats: {
-    weight,
-    base_xp,
-    "hp": powers.hp,
-    "attack": powers.attack,
-    "defense": powers.defense,
-    "speed": powers.speed,
-  },
-  url: img,
-}));
+// const newF = d.map(({ name, types, weight, base_xp, powers, img }) => ({
+//   name,
+//   types,
+//   stats: {
+//     weight,
+//     base_xp,
+//     hp: powers.hp,
+//     attack: powers.attack,
+//     defense: powers.defense,
+//     speed: powers.speed,
+//   },
+//   url: img,
+// }));
 
-Deno.writeTextFileSync("data.json", JSON.stringify(newF, null, 2));
+Deno.writeTextFileSync(
+  "./src/assets/poki-data.json",
+  JSON.stringify(mainData, null, 2),
+);

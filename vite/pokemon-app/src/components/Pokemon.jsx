@@ -4,25 +4,36 @@ import Types from "./Types.jsx";
 
 import pokemonData from "../assets/poki-data.json" with { type: "json" };
 
-const PokemonPage = ({ currentType }) => {
-  const filteredPokemon = pokemonData[currentType];
+const PokemonPage = ({ currentType, searchable }) => {
+  let filteredPokemon = pokemonData[currentType];
+  if (searchable) {
+    filteredPokemon = filteredPokemon.filter(({ name }) =>
+      name.startsWith(searchable),
+    );
+  }
+
+  console.log({ searchable });
 
   return (
     <>
-      {filteredPokemon.map((pokemon, id) => (
-        <a key={id} className="card">
-          <Image url={pokemon?.imageUrl} name={pokemon.name} />
+      {filteredPokemon.length > 0 ? (
+        filteredPokemon.map((pokemon, id) => (
+          <a key={id} className="card">
+            <Image url={pokemon?.imageUrl} name={pokemon.name} />
 
-          <div className="content flex flex-col">
-            <div className="header width-100 flex height-fit justify-between">
-              <div className="name">{pokemon.name}</div>
-              <Types types={pokemon.types} />
+            <div className="content flex flex-col">
+              <div className="header width-100 flex height-fit justify-between">
+                <div className="name">{pokemon.name}</div>
+                <Types types={pokemon.types} />
+              </div>
+
+              <Stats stats={pokemon.stats} />
             </div>
-
-            <Stats stats={pokemon.stats} />
-          </div>
-        </a>
-      ))}
+          </a>
+        ))
+      ) : (
+        <h2>No pokemons available</h2>
+      )}
     </>
   );
 };

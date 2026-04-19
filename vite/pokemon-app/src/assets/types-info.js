@@ -1,4 +1,5 @@
 export const types = [
+  'all',
   "bug",
   "dark",
   "dragon",

@@ -176,7 +176,7 @@ main {
   gap: 2em;
 }
 
-main>section,
+main > section,
 #more-info section {
   background: white;
   border-radius: 12px;
@@ -252,7 +252,7 @@ p {
   margin: 0.5em 0;
 }
 
-#general-details>section {
+#general-details > section {
   display: flex;
   align-items: baseline;
   margin: 1em 0;
@@ -335,7 +335,7 @@ li {
   position: relative;
   width: 100%;
   display: inline-block;
-  height: .6em;
+  height: 0.6em;
   background-color: #e0e0e0;
   border-radius: 10px;
   overflow: hidden;
@@ -343,7 +343,7 @@ li {
 
 #stats li span::after {
   position: absolute;
-  content: '';
+  content: "";
   height: 100%;
   left: 0;
   top: 0;
@@ -411,7 +411,18 @@ section header {
 * {
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
 }
 
 body {
@@ -427,7 +438,7 @@ body {
 
 .sidebar a {
   width: 100%;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   text-decoration: none;
   color: rgb(110, 110, 110);
 }
@@ -442,9 +453,9 @@ body {
   min-height: 25em;
   max-height: 27em;
   background-color: rgb(244, 244, 244);
-  padding: .7em;
+  padding: 0.7em;
   border: 1px solid black;
-  border-radius: .3em;
+  border-radius: 0.3em;
   padding-bottom: 1em;
   text-decoration: none;
 }
@@ -456,12 +467,12 @@ body {
 
 .content {
   height: 52%;
-  gap: .2em;
+  gap: 0.2em;
 }
 
 .header,
 .stats {
-  padding-top: .4em;
+  padding-top: 0.4em;
   color: rgb(110, 110, 110);
 }
 
@@ -475,24 +486,24 @@ body {
 }
 
 .types {
-  gap: .3em;
+  gap: 0.3em;
   color: white;
   font-weight: 500;
 }
 
 .types span {
-  padding: .3em;
-  border-radius: .3em;
+  padding: 0.3em;
+  border-radius: 0.3em;
   font-size: 1em;
 }
 
 span {
-  font-size: .85em;
+  font-size: 0.85em;
 }
 
 .stat {
   border-bottom: 1px solid gray;
-  padding-block: .33em;
+  padding-block: 0.33em;
 }
 
 .stat:last-child {
@@ -520,9 +531,9 @@ main nav {
 
 nav .btn {
   text-decoration: none;
-  padding: .5em 2em;
+  padding: 0.5em 2em;
   background-color: aliceblue;
-  border-radius: .2em;
+  border-radius: 0.2em;
   font-size: larger;
   background-color: rgb(226, 226, 226);
   color: black;
@@ -539,7 +550,7 @@ nav .btn {
 }
 
 .width-80 {
-  width: 80%;
+  width: 80vw;
 }
 
 .width-100 {
@@ -610,7 +621,21 @@ nav .btn {
   border: none;
 }
 
-
 #blocked {
   display: none;
+}
+
+#search-div {
+  position: fixed;
+  top: 2em;
+  right: 2em;
+  padding: 1.5em;
+  border: 3px solid;
+  border-radius: 0.5em;
+  background-color: #aeaeae;
+}
+
+#search-bar {
+  font-size: 1.2em;
+  padding: 0.5em;
 }
