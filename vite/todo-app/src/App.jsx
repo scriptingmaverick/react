@@ -6,13 +6,13 @@ import Toast from "./components/Toast";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import { createToast, toastHandler } from "./handlers/toastHandler";
-import { getTask, getTodo } from "./handlers/utils";
+import { getTodo } from "./handlers/utils";
+import Tasks from "./components/Tasks";
 
 const App = () => {
-  const [tasks, setTasks] = useState([]);
   const [toast, setToast] = useState({});
   const [todos, setTodos] = useState([]);
-  const [currentTodo, setcurrentTodo] = useState(todos.length > 0 ? 0 : -1);
+  const [currentTodoId, setcurrentTodoId] = useState(todos.length > 0 ? 0 : -1);
 
   const newTodoHandler = (title) => {
     const taskTitle = title.trim();
@@ -59,61 +59,37 @@ const App = () => {
 
   const removeTodoHandler = (e) => {
     const todo = getTodo(e);
-    todos.splice(todo.id, 1);
+    const newTodos = todos.filter((_, i) => i !== todo.id);
 
-    setTodos([...todos]);
+    setTodos(newTodos);
     createToast({ data: "Todo", code: 204 }, setToast);
   };
 
-  const newTaskHandler = (title) => {
-    const taskTitle = title.trim();
+  const selectTodoHandler = (e) => setcurrentTodoId(getTodo(e).id);
 
-    if (taskTitle.length > 2) {
-      const newTasks = [...tasks, { name: taskTitle, isCompleted: false }];
-      setTasks(newTasks);
-
-      createToast({ data: "Task", code: 201 }, setToast);
-      return true;
-    }
-
-    createToast({ data: "", code: 401 }, setToast);
+  const handlers = {
+    editTodoHandler,
+    newTodoHandler,
+    removeTodoHandler,
+    selectTodoHandler,
   };
-
-  const toggleTaskHandler = (e) => {
-    const taskElement = getTask(e);
-    const task = tasks[taskElement.id];
-
-    task.isCompleted = !task.isCompleted;
-
-    setTasks([...tasks]);
-    createToast({ data: "", code: "202-status" }, setToast);
-  };
-
-  const removeTaskHandler = (e) => {
-    const task = getTask(e);
-
-    tasks.splice(task.id, 1);
-    setTasks([...tasks]);
-    createToast({ data: "Task", code: 204 }, setToast);
-  };
-
-  const handlers = { editTodoHandler, newTodoHandler, removeTodoHandler };
 
   useEffect(() => toastHandler(toast), [toast]);
 
+  useEffect(() => setcurrentTodoId(todos.length - 1), [todos]);
+
+  console.log(currentTodoId)
+
   return (
-    <div>
-      <Navbar todos={todos} handlers={handlers} />
-      {/* <Input handler={newTaskHandler}>Add task</Input>
-      {tasks.length > 0 &&
-        tasks.map((task, id) => (
-          <Task
-            task={task}
-            key={id}
-            id={id}
-            handlers={{ toggleTaskHandler, removeTaskHandler }}
-          />
-        ))} */}
+    <div id="main">
+      <Navbar todos={todos} handlers={handlers} currentTodoId={currentTodoId} />
+      <Tasks
+        key={currentTodoId}
+        currentTodo={todos[currentTodoId]}
+        todos={todos}
+        setToast={setToast}
+        setTodos={setTodos}
+      />
       {Object.keys(toast).length > 0 && <Toast data={toast} />}
     </div>
   );

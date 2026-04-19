@@ -37,6 +37,13 @@ button {
   text-transform: capitalize;
 }
 
+#main {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
 button {
   height: fit-content;
   font-size: 0.8em;
@@ -46,7 +53,8 @@ button {
   cursor: pointer;
 }
 
-#navbar {
+#navbar,
+#tasks-component {
   width: 30%;
   height: 100vh;
   display: flex;
@@ -69,11 +77,12 @@ input.active {
   border-radius: 0.25em;
 }
 
-#navbar > input {
+input {
   width: max-content;
 }
 
-#navbar #todo-section {
+#navbar #todo-section,
+#tasks-container {
   width: 80%;
   height: 80%;
   display: flex;
@@ -84,7 +93,8 @@ input.active {
   border-radius: 0.3em;
 }
 
-#todo-section #todos {
+#todo-section #todos,
+#tasks {
   width: 100%;
   height: 90%;
   padding: 1em;
@@ -94,20 +104,31 @@ input.active {
   overflow-y: scroll;
 }
 
-.todo-name {
+#tasks-component {
+  width: 50%;
+  border: none;
+}
+
+.todo-name,
+.task-name {
   border: none;
   width: 50%;
   outline: none;
   font-weight: 500;
 }
 
-.todo {
+.todo,
+.task {
   display: flex;
   justify-content: space-between;
   border: 2px solid;
   padding: 0.5em;
   border-radius: 0.3em;
   border: 2.5px dashed gray;
+}
+
+.active-todo {
+  background-color: #cacaca;
 }
 
 .actions {
