@@ -1,4 +1,6 @@
-const Task = ({ taskData: { title, isDone } }: TaskProps) => (
+import { useState } from "react";
+
+const Task = ({ taskData: { title, isDone }, toggler }: TaskProps) => (
   <div>
     <span>
       {!isDone ? "❌" : "✅"}
@@ -6,8 +8,7 @@ const Task = ({ taskData: { title, isDone } }: TaskProps) => (
     </span>
 
     <span>
-      <button>Toggle</button>
-      <button>Remove</button>
+      <button onClick={toggler}>Toggle</button>
     </span>
   </div>
 );
@@ -19,14 +20,20 @@ type Task = {
 
 type TaskProps = {
   taskData: Task;
+  toggler: () => void;
 };
 
 const App = () => {
-  const taskData: Task = { title: "ride to ladakh", isDone: false };
+  const [task, setTask] = useState<Task>({
+    title: "ride to ladakh",
+    isDone: false,
+  });
+
+  const handleToggle = () => setTask({ ...task, isDone: !task.isDone });
 
   return (
     <div>
-      <Task taskData={taskData} />
+      {task && <Task taskData={task} toggler={handleToggle} />}
     </div>
   );
 };
