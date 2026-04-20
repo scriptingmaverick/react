@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Task = ({ taskData: { title, isDone }, toggler }: TaskProps) => (
+const Task = ({ taskData: { title, isDone, id }, toggler }: TaskProps) => (
   <div>
     <span>
       {!isDone ? "❌" : "✅"}
@@ -8,7 +8,7 @@ const Task = ({ taskData: { title, isDone }, toggler }: TaskProps) => (
     </span>
 
     <span>
-      <button onClick={toggler}>Toggle</button>
+      <button onClick={() => toggler(id)}>Toggle</button>
     </span>
   </div>
 );
@@ -16,24 +16,40 @@ const Task = ({ taskData: { title, isDone }, toggler }: TaskProps) => (
 type Task = {
   title: string;
   isDone: boolean;
+  id: number;
 };
 
 type TaskProps = {
   taskData: Task;
-  toggler: () => void;
+  toggler: (id: number) => void;
 };
 
 const App = () => {
-  const [task, setTask] = useState<Task>({
+  const tasksData: Task[] = [{
+    id: 1,
     title: "ride to ladakh",
     isDone: false,
-  });
+  }, {
+    id: 2,
+    title: "ride to montesore",
+    isDone: false,
+  }];
 
-  const handleToggle = () => setTask({ ...task, isDone: !task.isDone });
+  const [tasks, setTasks] = useState<Task[]>(tasksData);
+
+  const handleToggle = (taskId: number): void => {
+    const task = tasks.find(({ id }) => id === taskId) as Task;
+    task.isDone = !task.isDone;
+
+    setTasks([...tasks]);
+  };
 
   return (
     <div>
-      {task && <Task taskData={task} toggler={handleToggle} />}
+      {tasks.length > 0 &&
+        tasks.map((task) => (
+          <Task key={task.id} taskData={task} toggler={handleToggle} />
+        ))}
     </div>
   );
 };
