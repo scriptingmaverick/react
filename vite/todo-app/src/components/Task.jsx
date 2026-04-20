@@ -7,7 +7,7 @@ const Task = ({
   id,
 }) => {
   return (
-    <div className="task" id={id}>
+    <div className="task">
       <div className="task-data">
         <span className="status">{isCompleted ? "✅" : "❌"}</span>
         <Input className="task-name" readonly={true}>
@@ -15,7 +15,7 @@ const Task = ({
         </Input>
       </div>
       <div className="actions">
-        <Button clickHandler={toggleTaskHandler}>Toggle</Button>
+        <Button clickHandler={() => toggleTaskHandler(id)}>Toggle</Button>
         <Button clickHandler={removeTaskHandler}>Delete</Button>
       </div>
     </div>

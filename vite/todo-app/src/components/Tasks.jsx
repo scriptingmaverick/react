@@ -22,9 +22,8 @@ const Tasks = ({ currentTodo, todos, setTodos, setToast }) => {
     createToast({ data: "", code: 401 }, setToast);
   };
 
-  const toggleTaskHandler = (e) => {
-    const taskElement = getTask(e);
-    const task = tasks[taskElement.id];
+  const toggleTaskHandler = (taskId) => {
+    const task = tasks[taskId];
 
     task.isCompleted = !task.isCompleted;
 
@@ -32,10 +31,8 @@ const Tasks = ({ currentTodo, todos, setTodos, setToast }) => {
     createToast({ data: "", code: "202-status" }, setToast);
   };
 
-  const removeTaskHandler = (e) => {
-    const task = getTask(e);
-
-    tasks.splice(task.id, 1);
+  const removeTaskHandler = (taskId) => {
+    tasks.splice(taskId, 1);
     setTasks([...tasks]);
     createToast({ data: "Task", code: 204 }, setToast);
   };
@@ -48,36 +45,40 @@ const Tasks = ({ currentTodo, todos, setTodos, setToast }) => {
 
   return (
     <div id="tasks-component">
-      {currentTodo ? (
-        <>
-          <Input handler={newTaskHandler} canBePlaceholder={true}>
-            Add task
-          </Input>
-          <div id="tasks-container">
-            <h1>Tasks</h1>
-            <div id="tasks">
-              {tasks.length > 0 ? (
-                tasks.map((task, id) => (
-                  <Task
-                    task={task}
-                    key={id}
-                    id={id}
-                    handlers={{ toggleTaskHandler, removeTaskHandler }}
-                  />
-                ))
-              ) : (
-                <>
-                  <h1>No tasks available</h1>
-                </>
-              )}
+      {currentTodo
+        ? (
+          <>
+            <Input handler={newTaskHandler} canBePlaceholder={true}>
+              Add task
+            </Input>
+            <div id="tasks-container">
+              <h1>Tasks</h1>
+              <div id="tasks">
+                {tasks.length > 0
+                  ? (
+                    tasks.map((task, id) => (
+                      <Task
+                        task={task}
+                        key={id}
+                        id={id}
+                        handlers={{ toggleTaskHandler, removeTaskHandler }}
+                      />
+                    ))
+                  )
+                  : (
+                    <>
+                      <h1>No tasks available</h1>
+                    </>
+                  )}
+              </div>
             </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <h1> todo data is not available</h1>
-        </>
-      )}
+          </>
+        )
+        : (
+          <>
+            <h1>todo data is not available</h1>
+          </>
+        )}
     </div>
   );
 };
