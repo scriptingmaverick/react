@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-const Task = ({ taskData: { title, isDone, id }, toggler }: TaskProps) => (
+const Task = (
+  { taskData: { title, isDone, id }, toggler, remover }: TaskProps,
+) => (
   <div>
     <span>
       {!isDone ? "❌" : "✅"}
@@ -9,6 +11,7 @@ const Task = ({ taskData: { title, isDone, id }, toggler }: TaskProps) => (
 
     <span>
       <button onClick={() => toggler(id)}>Toggle</button>
+      <button onClick={() => remover(id)}>Remove</button>
     </span>
   </div>
 );
@@ -22,6 +25,7 @@ type Task = {
 type TaskProps = {
   taskData: Task;
   toggler: (id: number) => void;
+  remover: (id: number) => void;
 };
 
 const App = () => {
@@ -44,11 +48,22 @@ const App = () => {
     setTasks([...tasks]);
   };
 
+  const handleRemove = (taskId: number): void => {
+    const newTasks = tasks.filter(({ id }) => id !== taskId);
+
+    setTasks([...newTasks]);
+  };
+
   return (
     <div>
       {tasks.length > 0 &&
         tasks.map((task) => (
-          <Task key={task.id} taskData={task} toggler={handleToggle} />
+          <Task
+            key={task.id}
+            taskData={task}
+            toggler={handleToggle}
+            remover={handleRemove}
+          />
         ))}
     </div>
   );
