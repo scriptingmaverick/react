@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 const Task = (
   { taskData: { title, isDone, id }, handler }: TaskProps,
@@ -64,18 +64,6 @@ enum Actions {
 }
 
 const App = () => {
-  const tasksData: Task[] = [{
-    id: Date.now(),
-    title: "ride to ladakh",
-    isDone: false,
-  }, {
-    id: Date.now(),
-    title: "ride to montesore",
-    isDone: false,
-  }];
-
-  const [tasks, setTasks] = useState<Task[]>(tasksData);
-
   const reducer = (baseState: Task[], action: ActionProps): Task[] => {
     switch (action.type) {
       case Actions.ADD_TASK: {
@@ -106,8 +94,7 @@ const App = () => {
     return baseState;
   };
 
-  const dispatch = (action: ActionProps): void =>
-    setTasks(reducer(tasks, action));
+  const [tasks, dispatch] = useReducer(reducer, []);
 
   return (
     <div>
