@@ -2,7 +2,7 @@ import { produce } from "immer";
 import { useState } from "react";
 
 const Task = (
-  { taskData: { title, isDone, id }, toggler, remover }: TaskProps,
+  { taskData: { title, isDone, id }, handler }: TaskProps,
 ) => (
   <div>
     <span>
@@ -11,8 +11,12 @@ const Task = (
     </span>
 
     <span>
-      <button onClick={() => toggler(id)}>Toggle</button>
-      <button onClick={() => remover(id)}>Remove</button>
+      <button onClick={() => handler({ type: Actions.TOGGLE_TASK, id })}>
+        Toggle
+      </button>
+      <button onClick={() => handler({ type: Actions.REMOVE_TASK, id })}>
+        Remove
+      </button>
     </span>
   </div>
 );
@@ -48,14 +52,15 @@ type Task = {
 
 type TaskProps = {
   taskData: Task;
-  toggler: (id: number) => void;
-  remover: (id: number) => void;
+  handler: (action: ActionProps) => void;
 };
 
 type ActionProps = { type: number; id?: number; title?: string };
 
 enum Actions {
   ADD_TASK,
+  TOGGLE_TASK,
+  REMOVE_TASK,
 }
 
 const App = () => {
@@ -71,39 +76,38 @@ const App = () => {
 
   const [tasks, setTasks] = useState<Task[]>(tasksData);
 
-  const handleToggle = (taskId: number): void => {
-    const task = tasks.find(({ id }) => id === taskId) as Task;
-    task.isDone = !task.isDone;
-
-    setTasks([...tasks]);
-  };
-
-  const handleRemove = (taskId: number): void => {
-    const newTasks = tasks.filter(({ id }) => id !== taskId);
-
-    setTasks([...newTasks]);
-  };
-
   const reducer = (baseState: Task[], action: ActionProps): Task[] => {
-    const drafts: Task[] = produce(baseState, (x: Task): Task => x);
-
     switch (action.type) {
-      case Actions.ADD_TASK:
+      case Actions.ADD_TASK: {
+        const drafts: Task[] = produce(baseState, (x: Task): Task => x);
+
         return [...drafts, {
           id: Date.now(),
           title: action.title as string,
           isDone: false,
         }];
+      }
+
+      case Actions.TOGGLE_TASK: {
+        return produce(baseState, (draft) => {
+          const task = draft.find(({ id }) => id === action.id) as Task;
+          task.isDone = !task.isDone;
+        });
+      }
+
+      case Actions.REMOVE_TASK: {
+        return produce(baseState, (draft) => {
+          const taskIndex = draft.findIndex(({ id }) => id === action.id);
+          draft.splice(taskIndex, 1);
+        });
+      }
     }
 
-    return drafts;
+    return baseState;
   };
 
   const dispatch = (action: ActionProps): void =>
     setTasks(reducer(tasks, action));
-
-  // const addTask = (action: ActionProps): void =>
-  //   setTasks(reducer(tasks, action));
 
   return (
     <div>
@@ -113,8 +117,7 @@ const App = () => {
           <Task
             key={task.id}
             taskData={task}
-            toggler={handleToggle}
-            remover={handleRemove}
+            handler={dispatch}
           />
         ))}
     </div>
