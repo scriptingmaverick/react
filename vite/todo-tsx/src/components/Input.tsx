@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { type ActionDispatch, useState } from "react";
 import { type ActionProps, Actions } from "../types";
+import { useTodoDispatchContext } from "../context/todoContext";
 
-const Input = ({ addTask }: { addTask: (action: ActionProps) => void }) => {
+const Input = () => {
+  const addTask = useTodoDispatchContext() as ActionDispatch<
+    [action: ActionProps]
+  >;
   const [input, setInput] = useState("");
 
   return (
